@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack Pro | OOPS Dashboard</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #ec4899;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            width: 90%;
+            max-width: 1000px;
+            padding: 2rem;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-left: 6px solid transparent;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Polymorphic Styles based on C++ Classes */
+        .cardio { border-color: var(--primary); }
+        .strength { border-color: var(--secondary); }
+
+        h3 { margin-top: 0; font-size: 1.25rem; }
+        p { color: #94a3b8; margin: 0.5rem 0; }
+        
+        .badge {
+            background: #334155;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🏋️ FitTrack Dashboard</h1>
+        <p>Generated via C++ OOPS Engine</p>
+    </header>
+
+    <div class="dashboard">
+        <!-- Object 1: Cardio Instance -->
+        <div class="card cardio">
+            <span class="badge">Cardio</span>
+            <h3>Morning Run</h3>
+            <p>Duration: 45 mins</p>
+            <p>Distance: 5.2 km</p>
+        </div>
+
+        <!-- Object 2: Strength Instance -->
+        <div class="card strength">
+            <span class="badge">Strength</span>
+            <h3>Heavy Squats</h3>
+            <p>Duration: 60 mins</p>
+            <p>Weight: 120 kg</p>
+        </div>
+
+        <!-- Object 3: Cardio Instance -->
+        <div class="card cardio">
+            <span class="badge">Cardio</span>
+            <h3>Evening Cycling</h3>
+            <p>Duration: 30 mins</p>
+            <p>Distance: 12.0 km</p>
+        </div>
+    </div>
+
+</body>
+</html>
