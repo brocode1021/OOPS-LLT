@@ -1,0 +1,129 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+class Workout {
+protected:
+    string name;
+    int duration;
+    string date;
+
+public:
+    Workout(string n, int d, string dt) : name(n), duration(d), date(dt) {}
+    
+    virtual double calculateCalories() = 0;
+    virtual string getIcon() = 0;
+    virtual string getType() = 0;
+
+    string getName() { return name; }
+    int getDuration() { return duration; }
+    string getDate() { return date; }
+
+    virtual ~Workout() {}
+};
+
+class Cardio : public Workout {
+private:
+    double distance;
+
+public:
+    Cardio(string n, int d, string dt, double dist) 
+        : Workout(n, d, dt), distance(dist) {}
+
+    double calculateCalories() override {
+        return (duration * 8.0) + (distance * 5.0); 
+    }
+
+    string getIcon() override { return "🏃‍♂️"; }
+    string getType() override { return "cardio"; }
+};
+
+class Strength : public Workout {
+private:
+    int weight;
+
+public:
+    Strength(string n, int d, string dt, int w) 
+        : Workout(n, d, dt), weight(w) {}
+
+    double calculateCalories() override {
+        return (duration * 5.0) + (weight * 0.2);
+    }
+
+    string getIcon() override { return "🏋️‍♀️"; }
+    string getType() override { return "strength"; }
+};
+
+class FitnessWebSite {
+private:
+    vector<Workout*> logs;
+    string siteTitle;
+
+public:
+    FitnessWebSite(string title) : siteTitle(title) {}
+
+    void addWorkout(Workout* w) {
+        logs.push_back(w);
+    }
+
+    void generateHTML() {
+        ofstream file("index.html");
+
+        string css = R"(
+        <style>
+            :root { --cardio: #3498db; --strength: #e74c3c; --dark: #2c3e50; }
+            body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; display: flex; }
+            .sidebar { width: 250px; background: var(--dark); color: white; height: 100vh; padding: 20px; position: fixed; }
+            .main-content { margin-left: 290px; padding: 40px; width: 100%; }
+            .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+            .card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 8px solid; transition: 0.3s; }
+            .card:hover { transform: translateY(-10px); }
+            .card.cardio { border-color: var(--cardio); }
+            .card.strength { border-color: var(--strength); }
+            .icon { font-size: 2rem; margin-bottom: 10px; }
+            .calories { font-weight: bold; color: #27ae60; font-size: 1.2rem; }
+            .date { color: #95a5a6; font-size: 0.9rem; }
+            h1 { color: var(--dark); }
+        </style>
+        )";
+
+        file << "<!DOCTYPE html><html><head><title>" << siteTitle << "</title>" << css << "</head><body>";
+        file << "<div class='sidebar'><h2>FitTrack Pro</h2><p>Dashboard</p><p>History</p><p>Settings</p></div>";
+        file << "<div class='main-content'><h1>" << siteTitle << "</h1><div class='dashboard-grid'>";
+
+        for (Workout* w : logs) {
+            file << "<div class='card " << w->getType() << "'>"
+                 << "<div class='icon'>" << w->getIcon() << "</div>"
+                 << "<h3>" << w->getName() << "</h3>"
+                 << "<p class='date'>Date: " << w->getDate() << "</p>"
+                 << "<p>Duration: " << w->getDuration() << " mins</p>"
+                 << "<p class='calories'>🔥 " << (int)w->calculateCalories() << " kcal</p>"
+                 << "</div>";
+        }
+
+        file << "</div></div></body></html>";
+        file.close();
+        cout << "Dashboard generated successfully!" << endl;
+    }
+
+    ~FitnessWebSite() {
+        for (auto w : logs) delete w;
+    }
+};
+
+int main() {
+    FitnessWebSite myDashboard("My Fitness Activity");
+
+    myDashboard.addWorkout(new Cardio("Morning Run", 45, "2023-10-25", 6.5));
+    myDashboard.addWorkout(new Strength("Heavy Squats", 60, "2023-10-26", 100));
+    myDashboard.addWorkout(new Cardio("Evening Cycling", 30, "2023-10-27", 12.0));
+    myDashboard.addWorkout(new Strength("Upper Body Mix", 50, "2023-10-28", 40));
+    myDashboard.addWorkout(new Cardio("Beach Walk", 20, "2023-10-29", 3.0));
+
+    myDashboard.generateHTML();
+
+    return 0;
+}
