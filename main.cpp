@@ -1,18 +1,12 @@
-class Workout {
-protected:
-    string type;
-    double km, time;
+class Activity {
 public:
-    Workout(string t, double k, double m) : type(t), km(k), time(m) {}
-    virtual string calculateMetric() = 0; // Polymorphism: Pace vs Speed
+    virtual string getMetric(double d, double t) = 0; // Abstraction
 };
 
-class Running : public Workout {
-    // Pace: Minutes per km
-    string calculateMetric() override { return to_string(time/km) + " min/km"; }
+class Running : public Activity {
+    string getMetric(double d, double t) override { return to_string(t/d) + " min/km"; }
 };
 
-class Cycling : public Workout {
-    // Speed: km per hour
-    string calculateMetric() override { return to_string(km/(time/60)) + " km/h"; }
+class Cycling : public Activity {
+    string getMetric(double d, double t) override { return to_string(d/(t/60)) + " km/h"; }
 };
