@@ -3,102 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitTrack Pro | OOPS Dashboard</title>
+    <title>FitTrack Pro | Interactive OOPS</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --secondary: #ec4899;
+            --primary: #3b82f6;
+            --success: #10b981;
             --bg: #0f172a;
-            --card: #1e293b;
+            --surface: #1e293b;
             --text: #f8fafc;
         }
 
         body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background-color: var(--bg);
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg);
             color: var(--text);
             margin: 0;
+            padding: 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            justify-content: center;
         }
 
-        header {
-            padding: 2rem;
-            text-align: center;
+        .app-container {
+            width: 100%;
+            max-width: 600px;
         }
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            width: 90%;
-            max-width: 1000px;
-            padding: 2rem;
-        }
+        .header { text-align: center; margin-bottom: 2rem; }
 
+        /* Form Styling */
         .card {
-            background: var(--card);
+            background: var(--surface);
             padding: 1.5rem;
             border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            border-left: 6px solid transparent;
-            transition: transform 0.2s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            margin-bottom: 1.5rem;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: white;
+            box-sizing: border-box;
         }
 
-        /* Polymorphic Styles based on C++ Classes */
-        .cardio { border-color: var(--primary); }
-        .strength { border-color: var(--secondary); }
+        button {
+            background: var(--primary);
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-        h3 { margin-top: 0; font-size: 1.25rem; }
-        p { color: #94a3b8; margin: 0.5rem 0; }
-        
-        .badge {
+        button:hover { background: #2563eb; }
+
+        /* History List */
+        .history-item {
             background: #334155;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.8rem;
-            display: inline-block;
+            padding: 1rem;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease-out;
         }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .pace-badge {
+            background: var(--success);
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+
+        .tabs { display: flex; gap: 10px; margin-bottom: 1rem; }
+        .tab-btn { background: none; border: 1px solid var(--primary); width: auto; flex: 1; }
+        .tab-btn.active { background: var(--primary); }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>🏋️ FitTrack Dashboard</h1>
-        <p>Generated via C++ OOPS Engine</p>
-    </header>
-
-    <div class="dashboard">
-        <!-- Object 1: Cardio Instance -->
-        <div class="card cardio">
-            <span class="badge">Cardio</span>
-            <h3>Morning Run</h3>
-            <p>Duration: 45 mins</p>
-            <p>Distance: 5.2 km</p>
-        </div>
-
-        <!-- Object 2: Strength Instance -->
-        <div class="card strength">
-            <span class="badge">Strength</span>
-            <h3>Heavy Squats</h3>
-            <p>Duration: 60 mins</p>
-            <p>Weight: 120 kg</p>
-        </div>
-
-        <!-- Object 3: Cardio Instance -->
-        <div class="card cardio">
-            <span class="badge">Cardio</span>
-            <h3>Evening Cycling</h3>
-            <p>Duration: 30 mins</p>
-            <p>Distance: 12.0 km</p>
-        </div>
+<div class="app-container">
+    <div class="header">
+        <h1>🏃‍♂️ FitTrack Pro</h1>
+        <p>C++ OOPS Logic Implementation</p>
     </div>
+
+    <!-- Input Section (The Constructor Simulator) -->
+    <div class="card">
+        <h3>Log New Workout</h3>
+        <input type="text" id="workoutName" placeholder="Workout Name (e.g. Morning Run)">
+        <input type="number" id="distance" placeholder="Distance (km)">
+        <input type="number" id="duration" placeholder="Time (minutes)">
+        <button onclick="addWorkout()">Add to History & Calculate Pace</button>
+    </div>
+
+    <!-- Stats & History Section -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('history')">Workout History</button>
+    </div>
+
+    <div id="historyList">
+        <!-- Logs will appear here -->
+    </div>
+</div>
+
+<script>
+    // MIRRORING C++ OOP STRUCTURE IN JAVASCRIPT
+    class Workout {
+        constructor(name, duration, distance) {
+            this.name = name;
+            this.duration = duration;
+            this.distance = distance;
+            this.date = new Date().toLocaleDateString();
+        }
+
+        // Polymorphic-style calculation
+        calculatePace() {
+            if (this.distance <= 0) return 0;
+            return (this.duration / this.distance).toFixed(2);
+        }
+    }
+
+    let logs = [];
+
+    function addWorkout() {
+        const name = document.getElementById('workoutName').value;
+        const dist = parseFloat(document.getElementById('distance').value);
+        const dur = parseFloat(document.getElementById('duration').value);
+
+        if (!name || !dist || !dur) {
+            alert("Please fill all fields");
+            return;
+        }
+
+        // Instantiate "Class"
+        const newWorkout = new Workout(name, dur, dist);
+        logs.unshift(newWorkout); // Add to start of history
+        
+        renderHistory();
+        clearInputs();
+    }
+
+    function renderHistory() {
+        const list = document.getElementById('historyList');
+        list.innerHTML = "";
+
+        logs.forEach(workout => {
+            const pace = workout.calculatePace();
+            list.innerHTML += `
+                <div class="history-item">
+                    <div>
+                        <strong>${workout.name}</strong><br>
+                        <small>${workout.date} | ${workout.distance}km in ${workout.duration}m</small>
+                    </div>
+                    <div class="pace-badge">${pace} min/km</div>
+                </div>
+            `;
+        });
+    }
+
+    function clearInputs() {
+        document.getElementById('workoutName').value = "";
+        document.getElementById('distance').value = "";
+        document.getElementById('duration').value = "";
+    }
+</script>
 
 </body>
 </html>
