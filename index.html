@@ -3,179 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitTrack Pro | Interactive OOPS</title>
+    <title>FitFlow | OOPS Tracker</title>
     <style>
         :root {
-            --primary: #3b82f6;
-            --success: #10b981;
+            --primary: #6366f1;
             --bg: #0f172a;
-            --surface: #1e293b;
+            --card: #1e293b;
             --text: #f8fafc;
+            --accent: #10b981;
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Inter', sans-serif;
             background: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 20px;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
 
-        .app-container {
+        .app-box {
             width: 100%;
-            max-width: 600px;
+            max-width: 450px;
+            padding: 2rem;
         }
 
-        .header { text-align: center; margin-bottom: 2rem; }
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.4s; }
 
-        /* Form Styling */
-        .card {
-            background: var(--surface);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Page 1: Activity Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .option-card {
+            background: var(--card);
             padding: 1.5rem;
             border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            margin-bottom: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.3s;
         }
 
-        input, select, button {
+        .option-card:hover { border-color: var(--primary); background: #2d3a4f; }
+        .option-card i { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+
+        /* Page 2: Inputs */
+        .input-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #94a3b8; }
+        input {
             width: 100%;
             padding: 12px;
-            margin: 8px 0;
-            border-radius: 8px;
-            border: 1px solid #334155;
             background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
             color: white;
-            box-sizing: border-box;
+            font-size: 1rem;
         }
 
-        button {
-            background: var(--primary);
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
             border: none;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.2s;
+            background: var(--primary);
+            color: white;
         }
 
-        button:hover { background: #2563eb; }
+        .btn-secondary { background: transparent; border: 1px solid #334155; margin-top: 10px; }
 
-        /* History List */
-        .history-item {
-            background: #334155;
+        /* History */
+        .log-card {
+            background: var(--card);
             padding: 1rem;
-            margin: 10px 0;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary);
+            border-radius: 10px;
+            margin-top: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            animation: slideIn 0.3s ease-out;
+            border-left: 4px solid var(--accent);
         }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .pace-badge {
-            background: var(--success);
-            padding: 4px 8px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-        }
-
-        .tabs { display: flex; gap: 10px; margin-bottom: 1rem; }
-        .tab-btn { background: none; border: 1px solid var(--primary); width: auto; flex: 1; }
-        .tab-btn.active { background: var(--primary); }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <div class="header">
-        <h1>🏃‍♂️ FitTrack Pro</h1>
-        <p>C++ OOPS Logic Implementation</p>
+<div class="app-box">
+    <!-- STEP 1: SELECT ACTIVITY -->
+    <div id="step1" class="step active">
+        <h2>Select Activity</h2>
+        <p>What did you do today?</p>
+        <div class="grid">
+            <div class="option-card" onclick="selectActivity('Running', '🏃')">
+                <i>🏃</i> Running
+            </div>
+            <div class="option-card" onclick="selectActivity('Cycling', '🚲')">
+                <i>🚲</i> Cycling
+            </div>
+            <div class="option-card" onclick="selectActivity('Swimming', '🏊')">
+                <i>🏊</i> Swimming
+            </div>
+        </div>
     </div>
 
-    <!-- Input Section (The Constructor Simulator) -->
-    <div class="card">
-        <h3>Log New Workout</h3>
-        <input type="text" id="workoutName" placeholder="Workout Name (e.g. Morning Run)">
-        <input type="number" id="distance" placeholder="Distance (km)">
-        <input type="number" id="duration" placeholder="Time (minutes)">
-        <button onclick="addWorkout()">Add to History & Calculate Pace</button>
+    <!-- STEP 2: INPUT DATA -->
+    <div id="step2" class="step">
+        <h2 id="selectedTitle">Running</h2>
+        <div class="input-group">
+            <label id="unitLabel">Distance (km)</label>
+            <input type="number" id="distance" placeholder="0.0">
+        </div>
+        <div class="input-group">
+            <label>Time (minutes)</label>
+            <input type="number" id="duration" placeholder="0">
+        </div>
+        <button class="btn" onclick="saveWorkout()">Finish & Calculate</button>
+        <button class="btn btn-secondary" onclick="goBack()">Go Back</button>
     </div>
 
-    <!-- Stats & History Section -->
-    <div class="tabs">
-        <button class="tab-btn active" onclick="showTab('history')">Workout History</button>
-    </div>
-
-    <div id="historyList">
-        <!-- Logs will appear here -->
+    <!-- HISTORY SECTION -->
+    <div id="historySection" style="margin-top: 2rem;">
+        <h3 style="color: #94a3b8;">Recent History</h3>
+        <div id="logs"></div>
     </div>
 </div>
 
 <script>
-    // MIRRORING C++ OOP STRUCTURE IN JAVASCRIPT
+    let currentActivity = "";
+    let currentIcon = "";
+
+    // 1. NAVIGATION LOGIC
+    function selectActivity(type, icon) {
+        currentActivity = type;
+        currentIcon = icon;
+        document.getElementById('selectedTitle').innerText = icon + " " + type;
+        
+        // Change label based on activity
+        document.getElementById('unitLabel').innerText = (type === 'Swimming') ? "Distance (meters)" : "Distance (km)";
+
+        document.getElementById('step1').classList.remove('active');
+        document.getElementById('step2').classList.add('active');
+    }
+
+    function goBack() {
+        document.getElementById('step2').classList.remove('active');
+        document.getElementById('step1').classList.add('active');
+    }
+
+    // 2. OOPS-STYLE LOGIC ENGINE
     class Workout {
-        constructor(name, duration, distance) {
-            this.name = name;
-            this.duration = duration;
-            this.distance = distance;
-            this.date = new Date().toLocaleDateString();
+        constructor(type, icon, dist, time) {
+            this.type = type;
+            this.icon = icon;
+            this.dist = dist;
+            this.time = time;
         }
 
-        // Polymorphic-style calculation
-        calculatePace() {
-            if (this.distance <= 0) return 0;
-            return (this.duration / this.distance).toFixed(2);
+        // Polymorphic calculation logic
+        getCalculation() {
+            if (this.type === "Running") {
+                let pace = this.time / this.dist;
+                return pace.toFixed(2) + " min/km";
+            } else if (this.type === "Cycling") {
+                let speed = this.dist / (this.time / 60);
+                return speed.toFixed(1) + " km/h";
+            } else {
+                return (this.dist / this.time).toFixed(1) + " m/min";
+            }
         }
     }
 
-    let logs = [];
+    const history = [];
 
-    function addWorkout() {
-        const name = document.getElementById('workoutName').value;
-        const dist = parseFloat(document.getElementById('distance').value);
-        const dur = parseFloat(document.getElementById('duration').value);
+    function saveWorkout() {
+        const d = parseFloat(document.getElementById('distance').value);
+        const t = parseFloat(document.getElementById('duration').value);
 
-        if (!name || !dist || !dur) {
-            alert("Please fill all fields");
-            return;
-        }
+        if (!d || !t) return alert("Enter valid numbers");
 
-        // Instantiate "Class"
-        const newWorkout = new Workout(name, dur, dist);
-        logs.unshift(newWorkout); // Add to start of history
-        
+        // Creating a new "Object"
+        const workoutObj = new Workout(currentActivity, currentIcon, d, t);
+        history.unshift(workoutObj);
+
         renderHistory();
-        clearInputs();
+        
+        // Reset and go back
+        document.getElementById('distance').value = "";
+        document.getElementById('duration').value = "";
+        goBack();
     }
 
     function renderHistory() {
-        const list = document.getElementById('historyList');
-        list.innerHTML = "";
-
-        logs.forEach(workout => {
-            const pace = workout.calculatePace();
-            list.innerHTML += `
-                <div class="history-item">
-                    <div>
-                        <strong>${workout.name}</strong><br>
-                        <small>${workout.date} | ${workout.distance}km in ${workout.duration}m</small>
-                    </div>
-                    <div class="pace-badge">${pace} min/km</div>
+        const container = document.getElementById('logs');
+        container.innerHTML = history.map(item => `
+            <div class="log-card">
+                <div>
+                    <strong>${item.icon} ${item.type}</strong><br>
+                    <small>${item.dist} ${item.type === 'Swimming' ? 'm' : 'km'} in ${item.time}m</small>
                 </div>
-            `;
-        });
-    }
-
-    function clearInputs() {
-        document.getElementById('workoutName').value = "";
-        document.getElementById('distance').value = "";
-        document.getElementById('duration').value = "";
+                <div style="text-align: right">
+                    <span style="color: var(--accent); font-weight: bold;">${item.getCalculation()}</span>
+                </div>
+            </div>
+        `).join('');
     }
 </script>
 
