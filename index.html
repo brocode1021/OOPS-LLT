@@ -3,186 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitTrack Pro | OOPS Edition</title>
+    <title>FitTrack Pro | Dynamic Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #6366f1;
-            --bg: #0b0f1a;
-            --card-bg: rgba(30, 41, 59, 0.7);
+            --bg-speed: 15s;
         }
 
+        /* 1. MULTIPLE COLOR ANIMATED BACKGROUND */
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg);
-            background-image: radial-gradient(circle at top right, #1e1b4b, transparent),
-                              radial-gradient(circle at bottom left, #1e1b4b, transparent);
-            color: #f8fafc;
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            color: #f8fafc;
+            overflow-x: hidden;
+            
+            /* Multi-color Gradient */
+            background: linear-gradient(-45deg, #0b0f1a, #1e1b4b, #2e1065, #083344);
+            background-size: 400% 400%;
+            animation: gradientBG var(--bg-speed) ease infinite;
         }
 
-        .container { width: 100%; max-width: 500px; margin-top: 2rem; }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-        header { text-align: center; margin-bottom: 2rem; }
-        header h1 { font-size: 2.5rem; font-weight: 800; margin: 0; }
+        .container { width: 100%; max-width: 500px; z-index: 10; }
 
-        /* STEP 1: ACTIVITY ROW */
+        header { text-align: center; margin-bottom: 3rem; }
+        header h1 { font-size: 2.8rem; font-weight: 800; margin: 0; text-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+
+        /* ACTIVITY BUTTONS ROW */
         .activity-row {
             display: flex;
             justify-content: space-between;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 2rem;
         }
 
         .activity-btn {
             flex: 1;
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 20px 5px;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 25px 5px;
+            border-radius: 24px;
             text-align: center;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .activity-btn:hover {
-            transform: translateY(-5px);
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.15);
             border-color: var(--primary);
-            background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 30px var(--primary);
         }
 
-        .activity-btn .icon { font-size: 3rem; display: block; margin-bottom: 8px; }
-        .activity-btn span { font-weight: 600; font-size: 0.9rem; color: #cbd5e1; }
+        .activity-btn .icon { font-size: 3.2rem; display: block; margin-bottom: 10px; }
+        .activity-btn span { font-weight: 700; font-size: 0.9rem; letter-spacing: 0.5px; }
 
-        /* STEP 2: INPUT CARD (Hidden by default) */
+        /* INPUT CARD */
         #inputCard {
-            display: none; /* JS will change this to 'block' */
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            padding: 2rem;
-            border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            display: none;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(25px);
+            padding: 2.5rem;
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .input-group { margin-bottom: 1.5rem; }
-        label { display: block; margin-bottom: 8px; color: #94a3b8; font-size: 0.9rem; }
+        label { display: block; margin-bottom: 10px; color: #94a3b8; font-weight: 600; }
         input {
             width: 100%;
-            padding: 14px;
-            background: #0f172a;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
             color: white;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             box-sizing: border-box;
+            transition: 0.3s;
         }
+        input:focus { border-color: var(--primary); outline: none; background: rgba(0,0,0,0.5); }
 
         .btn-save {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 14px;
-            font-weight: 700;
+            border-radius: 16px;
+            font-weight: 800;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            transition: 0.3s;
         }
 
         .btn-back {
             background: none;
-            color: #64748b;
+            color: #94a3b8;
             border: none;
             cursor: pointer;
-            margin-bottom: 10px;
-            display: block;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
 
-        /* HISTORY */
+        /* LOGS */
         .history-list { margin-top: 3rem; }
         .log-item {
-            background: rgba(255,255,255,0.03);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 12px;
+            padding: 20px;
+            border-radius: 20px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
         }
-        .metric { font-weight: 800; color: #10b981; }
+        .log-item:hover { background: rgba(255, 255, 255, 0.08); }
+        .metric { font-weight: 800; font-size: 1.2rem; color: #2dd4bf; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>FitTrack</h1>
-        <p>C++ OOPS Logic Engine</p>
+        <h1>FitTrack Pro</h1>
+        <p>Interactive OOPS Engine</p>
     </header>
 
-    <!-- UI STEP 1: SELECTION -->
+    <!-- STEP 1: ACTIVITY SELECTION -->
     <div id="step1">
         <div class="activity-row">
-            <div class="activity-btn" onclick="openInputPage('Running', '🏃‍♂️')">
+            <div class="activity-btn" onclick="openPage('Running', '🏃‍♂️', '#fbbf24')">
                 <span class="icon">🏃‍♂️</span>
-                <span>Run</span>
+                <span>RUN</span>
             </div>
-            <div class="activity-btn" onclick="openInputPage('Cycling', '🚲')">
+            <div class="activity-btn" onclick="openPage('Cycling', '🚲', '#3b82f6')">
                 <span class="icon">🚲</span>
-                <span>Cycle</span>
+                <span>CYCLE</span>
             </div>
-            <div class="activity-btn" onclick="openInputPage('Swimming', '🏊‍♂️')">
+            <div class="activity-btn" onclick="openPage('Swimming', '🏊‍♂️', '#10b981')">
                 <span class="icon">🏊‍♂️</span>
-                <span>Swim</span>
+                <span>SWIM</span>
             </div>
         </div>
     </div>
 
-    <!-- UI STEP 2: INPUT FORM -->
+    <!-- STEP 2: INPUT PAGE -->
     <div id="inputCard">
-        <button class="btn-back" onclick="goBack()">← Back</button>
-        <h2 id="displayTitle" style="margin-top:0;">Running</h2>
+        <button class="btn-back" onclick="goBack()">← CHANGE ACTIVITY</button>
+        <h2 id="pageTitle" style="margin-top:0; font-size: 2rem;">Running</h2>
         
         <div class="input-group">
-            <label id="labelDist">Distance (km)</label>
-            <input type="number" id="inDist" placeholder="0.00">
+            <label id="labelUnits">Distance (km)</label>
+            <input type="number" id="fieldDist" placeholder="0.00">
         </div>
         
         <div class="input-group">
             <label>Time (minutes)</label>
-            <input type="number" id="inTime" placeholder="0">
+            <input type="number" id="fieldTime" placeholder="0">
         </div>
         
-        <button class="btn-save" onclick="saveData()">Save Activity</button>
+        <button class="btn-save" onclick="saveToOOPS()">LOG WORKOUT</button>
     </div>
 
     <!-- HISTORY -->
     <div class="history-list">
-        <h3>Recent Activity</h3>
-        <div id="logContent"></div>
+        <h3 style="color: #94a3b8; letter-spacing: 1px;">HISTORY</h3>
+        <div id="historyBox"></div>
     </div>
 </div>
 
 <script>
-    let selectedType = "";
-    let selectedIcon = "";
+    let currentType = "";
+    let currentIcon = "";
 
-    // 1. Navigation Logic (Switching "Pages")
-    function openInputPage(type, icon) {
-        selectedType = type;
-        selectedIcon = icon;
+    // 1. DYNAMIC NAVIGATION
+    function openPage(type, icon, color) {
+        currentType = type;
+        currentIcon = icon;
 
-        // Update UI Text
-        document.getElementById('displayTitle').innerText = icon + " " + type;
-        document.getElementById('labelDist').innerText = (type === 'Swimming') ? "Distance (meters)" : "Distance (km)";
+        // Change "Theme" color based on activity
+        document.documentElement.style.setProperty('--primary', color);
+        
+        document.getElementById('pageTitle').innerText = icon + " " + type;
+        document.getElementById('labelUnits').innerText = (type === 'Swimming') ? "Distance (meters)" : "Distance (km)";
 
-        // Switch Visibility
         document.getElementById('step1').style.display = 'none';
         document.getElementById('inputCard').style.display = 'block';
     }
@@ -190,9 +213,10 @@
     function goBack() {
         document.getElementById('inputCard').style.display = 'none';
         document.getElementById('step1').style.display = 'block';
+        document.documentElement.style.setProperty('--primary', '#6366f1'); // Reset color
     }
 
-    // 2. OOPS Logic (Mirroring C++ Classes)
+    // 2. OOPS LOGIC ENGINE (Classes)
     class Workout {
         constructor(type, icon, dist, time) {
             this.type = type;
@@ -201,7 +225,7 @@
             this.time = time;
         }
 
-        // Polymorphic Calculation
+        // Polymorphic Logic
         calculate() {
             if (this.type === 'Running') return (this.time / this.dist).toFixed(2) + " min/km";
             if (this.type === 'Cycling') return (this.dist / (this.time/60)).toFixed(1) + " km/h";
@@ -209,33 +233,33 @@
         }
     }
 
-    const dataLogs = [];
+    const memory = [];
 
-    function saveData() {
-        const d = parseFloat(document.getElementById('inDist').value);
-        const t = parseFloat(document.getElementById('inTime').value);
+    function saveToOOPS() {
+        const d = parseFloat(document.getElementById('fieldDist').value);
+        const t = parseFloat(document.getElementById('fieldTime').value);
 
-        if (!d || !t) return alert("Please enter numbers!");
+        if (!d || !t) return alert("Please input metrics!");
 
-        // Create Object
-        const newEntry = new Workout(selectedType, selectedIcon, d, t);
-        dataLogs.unshift(newEntry);
+        const workoutObj = new Workout(currentType, currentIcon, d, t);
+        memory.unshift(workoutObj);
 
-        // Update History UI
-        const container = document.getElementById('logContent');
-        container.innerHTML = dataLogs.map(item => `
-            <div class="log-item">
+        // Update UI
+        const box = document.getElementById('historyBox');
+        box.innerHTML = memory.map(item => `
+            <div class="log-item" style="border-left: 5px solid var(--primary)">
                 <div>
-                    <strong>${item.icon} ${item.type}</strong><br>
-                    <small>${item.dist}${item.type==='Swimming'?'m':'km'} • ${item.time}m</small>
+                    <span style="font-size: 1.5rem">${item.icon}</span> 
+                    <strong>${item.type}</strong><br>
+                    <small style="color:#94a3b8">${item.dist}${item.type==='Swimming'?'m':'km'} in ${item.time}m</small>
                 </div>
                 <div class="metric">${item.calculate()}</div>
             </div>
         `).join('');
 
-        // Reset and Go Back
-        document.getElementById('inDist').value = "";
-        document.getElementById('inTime').value = "";
+        // Reset
+        document.getElementById('fieldDist').value = "";
+        document.getElementById('fieldTime').value = "";
         goBack();
     }
 </script>
