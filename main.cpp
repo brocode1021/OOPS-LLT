@@ -1,43 +1,18 @@
-#include <iostream>
-#include <string>
-#include <vector>
-
-using namespace std;
-
-// 1. ABSTRACTION: Interface for anything that has a 'pace'
-class IPaceCalculatable {
-public:
-    virtual double calculatePace() = 0; 
-};
-
-// 2. BASE CLASS (Encapsulation & Constructors)
-class Workout : public IPaceCalculatable {
+class Workout {
 protected:
-    string name;
-    double duration; // minutes
-
+    string type;
+    double km, time;
 public:
-    Workout(string n, double d) : name(n), duration(d) {}
-    virtual string getType() = 0; 
-    virtual ~Workout() {}
+    Workout(string t, double k, double m) : type(t), km(k), time(m) {}
+    virtual string calculateMetric() = 0; // Polymorphism: Pace vs Speed
 };
 
-// 3. INHERITANCE & POLYMORPHISM
 class Running : public Workout {
-private:
-    double distance; // km
-public:
-    Running(string n, double d, double dist) : Workout(n, d), distance(dist) {}
-
-    // Specific Polymorphic Implementation
-    double calculatePace() override {
-        return duration / distance; // Minutes per km
-    }
-
-    string getType() override { return "Cardio"; }
+    // Pace: Minutes per km
+    string calculateMetric() override { return to_string(time/km) + " min/km"; }
 };
 
-int main() {
-    // This logic is mirrored in the JavaScript for the web version
-    return 0;
-}
+class Cycling : public Workout {
+    // Speed: km per hour
+    string calculateMetric() override { return to_string(km/(time/60)) + " km/h"; }
+};
