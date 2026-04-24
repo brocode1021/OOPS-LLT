@@ -1,48 +1,43 @@
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
 using namespace std;
 
-// 1. ABSTRACTION
-class Workout {
+// 1. ABSTRACTION: Interface for anything that has a 'pace'
+class IPaceCalculatable {
+public:
+    virtual double calculatePace() = 0; 
+};
+
+// 2. BASE CLASS (Encapsulation & Constructors)
+class Workout : public IPaceCalculatable {
 protected:
     string name;
-    int duration;
+    double duration; // minutes
+
 public:
-    Workout(string n, int d) : name(n), duration(d) {} // CONSTRUCTOR
-    virtual string getHtmlCard() = 0; // Pure Virtual Function
+    Workout(string n, double d) : name(n), duration(d) {}
+    virtual string getType() = 0; 
     virtual ~Workout() {}
 };
 
-// 2. INHERITANCE
-class Cardio : public Workout {
-    float distance;
+// 3. INHERITANCE & POLYMORPHISM
+class Running : public Workout {
+private:
+    double distance; // km
 public:
-    Cardio(string n, int d, float dist) : Workout(n, d), distance(dist) {}
-    
-    // 3. POLYMORPHISM
-    string getHtmlCard() override {
-        return "<div class='card cardio'><h3>🏃 " + name + "</h3>" +
-               "<p>Duration: " + to_string(duration) + "m</p>" +
-               "<p>Distance: " + to_string((int)distance) + "km</p></div>";
-    }
-};
+    Running(string n, double d, double dist) : Workout(n, d), distance(dist) {}
 
-class Strength : public Workout {
-    int weight;
-public:
-    Strength(string n, int d, int w) : Workout(n, d), weight(w) {}
-    
-    // 3. POLYMORPHISM
-    string getHtmlCard() override {
-        return "<div class='card strength'><h3>🏋️ " + name + "</h3>" +
-               "<p>Duration: " + to_string(duration) + "m</p>" +
-               "<p>Weight: " + to_string(weight) + "kg</p></div>";
+    // Specific Polymorphic Implementation
+    double calculatePace() override {
+        return duration / distance; // Minutes per km
     }
+
+    string getType() override { return "Cardio"; }
 };
 
 int main() {
-    // This logic generates the HTML below
+    // This logic is mirrored in the JavaScript for the web version
     return 0;
 }
